@@ -31,5 +31,48 @@ namespace TetrisGame
                 }
             }
         }
+
+        public bool CheckFigureRotation(Figure figure, out int shiftX)
+        {
+            throw new NotImplementedException();
+            shiftX = 0;
+            return true;
+        }
+
+        public bool CheckFigureDescent(Figure figure)
+        {
+            figure.Y += 1;
+            for(int i = 0; i < 4; ++i)
+            {
+                for (int j = 0; j < 4; ++j)
+                {
+                    if (figure.Matrix[i, j] <= 0) continue;
+                    bool isLowerThanField = figure.Y + j >= _matrixSizeY;
+                    bool isSquareIntersects = false;
+                    if (!isLowerThanField && figure.Y + j >= 0) isSquareIntersects = _matrix[figure.X + i, figure.Y + j] > 0;
+                    if (isLowerThanField || isSquareIntersects) 
+                    {
+                        figure.Y -= 1;
+                        return false;
+                    }
+                }
+            }
+            figure.Y -= 1;
+            return true;
+        }
+
+        public bool AddFigure(Figure figure)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                for (int j = 0; j < 4; ++j)
+                {
+                    if (figure.Matrix[i, j] <= 0) continue;
+                    if (figure.Y + j < 0) return false;
+                    _matrix[figure.X + i, figure.Y + j] = figure.Matrix[i, j];
+                }
+            }
+            return true;
+        }
     }
 }
