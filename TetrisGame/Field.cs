@@ -8,7 +8,7 @@ namespace TetrisGame
 {
     public class Field
     {
-        private DrawManager drawManager;
+        private static DrawManager DrawManager { get; set; }
 
         private const int _matrixSizeX = 10;
         private const int _matrixSizeY = 20;
@@ -16,7 +16,9 @@ namespace TetrisGame
 
         public Field(DrawManager drawManager)
         {
-            this.drawManager = drawManager;
+            DrawManager = drawManager;
+            DrawManager.MatrixSizeX = _matrixSizeX;
+            DrawManager.MatrixSizeY = _matrixSizeY;
         }
 
         public void Draw()
@@ -25,7 +27,7 @@ namespace TetrisGame
             {
                 for (int j = 0; j < _matrixSizeY; ++j)
                 {
-                    drawManager.DrawSquare(i, j, _matrix[i, j]);
+                    DrawManager.DrawSquare(i, j, _matrix[i, j]);
                 }
             }
         }

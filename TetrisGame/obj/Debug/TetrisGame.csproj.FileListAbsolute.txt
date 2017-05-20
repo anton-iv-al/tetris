@@ -30,3 +30,4 @@ D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\square_red.xnb
 D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\square_violet.xnb
 D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\square_yellow.xnb
 D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\strips.xnb
+D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Figures.txt

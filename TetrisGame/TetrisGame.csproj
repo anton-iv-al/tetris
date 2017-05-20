@@ -63,6 +63,8 @@
   <ItemGroup>
     <Compile Include="DrawManager.cs" />
     <Compile Include="Field.cs" />
+    <Compile Include="Figure.cs" />
+    <Compile Include="FigureTypes.cs" />
     <Compile Include="SquareColor.cs" />
     <Compile Include="TetrisGame.cs" />
     <Compile Include="Program.cs" />
@@ -81,6 +83,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Figures.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

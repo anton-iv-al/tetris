@@ -31,6 +31,9 @@ namespace TetrisGame
         private Point _squareSize;
         private int _frameThickness = 10;
 
+        public int MatrixSizeX { get; set; }
+        public int MatrixSizeY { get; set; }
+
         public DrawManager(GraphicsDeviceManager graphics, GameWindow Window)
         {
             this.graphics = graphics;
@@ -72,12 +75,6 @@ namespace TetrisGame
             Primitives2D.DrawRectangle(spriteBatch, _gameAreaForDraw, Color.Blue, _frameThickness);
         }
 
-        public void DrawFigure()
-        {
-            spriteBatch.Draw(_squareBlue, new Rectangle(new Point(150, 100), _squareSize), Color.White);
-            spriteBatch.Draw(_squareOrange, new Rectangle(new Point(220, 520), _squareSize), Color.White);
-        }
-
         public void DrawText(int gameLevel, int linesCount)
         {
             spriteBatch.DrawString(_defaultFont, "level", new Vector2(400, 200), Color.Black);
@@ -89,6 +86,8 @@ namespace TetrisGame
 
         public void DrawSquare(int x, int y, SquareColor color)    // координаты в матрице
         {
+            if (x < 0 || x >= MatrixSizeX || y < 0 || y >= MatrixSizeY) return;
+
             Texture2D squareTexture = _squareRed;
             switch(color)
             {

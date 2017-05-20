@@ -4,9 +4,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TetrisGame
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class TetrisGame : Game
     {
         private SpriteBatch spriteBatch;
@@ -16,35 +13,46 @@ namespace TetrisGame
         private int _gameSpeed = 1;
         private int _linesCount = 0;
 
+        private bool _isRun = true;
+
         private Field _field;
+        private FigureTypes _figureTypes = new FigureTypes();
+        private Figure _currentFigure;
 
         public TetrisGame()
         {
-            drawManager = new DrawManager(new GraphicsDeviceManager(this), Window);
-            _field = new Field(drawManager);
+            try
+            {
+                drawManager = new DrawManager(new GraphicsDeviceManager(this), Window);
+                _field = new Field(drawManager);
+                Figure.DrawManager = drawManager;
 
-            Content.RootDirectory = "Content";           
+                Content.RootDirectory = "Content";
+            }
+            catch (System.Exception e)
+            {
+                _isRun = false;
+                ShowExceptionMessage(e);
+            }
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
-            drawManager.Initialize();
+            try
+            {
+                drawManager.Initialize();
+                CreateNewFigure();
+            }
+            catch (System.Exception e)
+            {
+                _isRun = false;
+                ShowExceptionMessage(e);
+            }
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
-        {
-            // Create a new SpriteBatch, which can be used to draw textures.            
+        {           
             try
             {
                 spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -52,27 +60,20 @@ namespace TetrisGame
             }
             catch (System.Exception e)
             {
+                _isRun = false;
                 ShowExceptionMessage(e);
             }
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
+            if (!_isRun) return;
 
             try
             {
@@ -80,18 +81,16 @@ namespace TetrisGame
             }
             catch (System.Exception e)
             {
+                _isRun = false;
                 ShowExceptionMessage(e);
             }
 
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            if (!_isRun) return;
             spriteBatch.Begin();
 
             try
@@ -99,10 +98,11 @@ namespace TetrisGame
                 drawManager.DrawBackGround();
                 drawManager.DrawText(_gameLevel, _linesCount);
                 _field.Draw();
-                drawManager.DrawFigure();
+                _currentFigure.Draw();
             }
             catch (System.Exception e)
             {
+                _isRun = false;
                 ShowExceptionMessage(e);
             }
 
@@ -117,6 +117,11 @@ namespace TetrisGame
                     e.Message + "\n\n" +
                     e.StackTrace
                 , "Error");
+        }
+
+        private void CreateNewFigure()
+        {
+            _currentFigure = new Figure(_figureTypes.GetRandomMatrix());
         }
     }
 }
