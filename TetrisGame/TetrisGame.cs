@@ -10,7 +10,8 @@ namespace TetrisGame
         private DrawManager drawManager;
 
         private int _gameLevel = 1;
-        private int _gameSpeed = 5;
+        private int _gameSpeed = 1;
+        private bool _isSpeedUp = false;
         private int _linesCount = 0;
 
         private bool _isRun = true;
@@ -78,6 +79,8 @@ namespace TetrisGame
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
             if (!_isRun) return;
+            if (Keyboard.GetState().IsKeyDown(Keys.Down)) SpeedUp(true);
+            if (Keyboard.GetState().IsKeyUp(Keys.Down)) SpeedUp(false);
 
             _currentTime += gameTime.ElapsedGameTime.Milliseconds;
             if (_currentTime < UpdatePeriodTime) return;
@@ -140,6 +143,13 @@ namespace TetrisGame
         private void GameOver()
         {
             _isRun = false;
+        }
+
+        private void SpeedUp(bool isEnabled)
+        {
+            _isSpeedUp = isEnabled;
+            if (isEnabled) _gameSpeed = 30;
+            else _gameSpeed = _gameLevel;
         }
     }
 }
