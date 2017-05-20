@@ -4,7 +4,6 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/wall_1.jpg</File>
     <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/default.spritefont</File>
     <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_green.png</File>
     <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_light_blue.png</File>
@@ -13,5 +12,6 @@
     <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_yellow.png</File>
     <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_blue.png</File>
     <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_orange.png</File>
+    <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/strips.jpeg</File>
   </SourceFiles>
 </SourceFileCollection>

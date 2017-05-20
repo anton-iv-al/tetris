@@ -21,7 +21,6 @@ D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\SharpDX.Direct3D9.xml
 D:\C#\Projs\TetrisGame\TetrisGame\obj\Debug\TetrisGame.csprojResolveAssemblyReference.cache
 D:\C#\Projs\TetrisGame\TetrisGame\obj\Debug\TetrisGame.exe
 D:\C#\Projs\TetrisGame\TetrisGame\obj\Debug\TetrisGame.pdb
-D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\wall_1.xnb
 D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\default.xnb
 D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\square_blue.xnb
 D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\square_green.xnb
@@ -30,3 +29,4 @@ D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\square_orange.xnb
 D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\square_red.xnb
 D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\square_violet.xnb
 D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\square_yellow.xnb
+D:\C#\Projs\TetrisGame\TetrisGame\bin\Debug\Content\strips.xnb

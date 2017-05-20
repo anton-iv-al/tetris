@@ -9,11 +9,20 @@ namespace TetrisGame
     /// </summary>
     public class TetrisGame : Game
     {
+        private SpriteBatch spriteBatch;
         private DrawManager drawManager;
+
+        private int _gameLevel = 1;
+        private int _gameSpeed = 1;
+        private int _linesCount = 0;
+
+        private Field _field;
 
         public TetrisGame()
         {
             drawManager = new DrawManager(new GraphicsDeviceManager(this), Window);
+            _field = new Field(drawManager);
+
             Content.RootDirectory = "Content";           
         }
 
@@ -35,8 +44,16 @@ namespace TetrisGame
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            drawManager.LoadContent(new SpriteBatch(GraphicsDevice), Content);
+            // Create a new SpriteBatch, which can be used to draw textures.            
+            try
+            {
+                spriteBatch = new SpriteBatch(GraphicsDevice);
+                drawManager.LoadContent(spriteBatch, Content);
+            }
+            catch (System.Exception e)
+            {
+                ShowExceptionMessage(e);
+            }
         }
 
         /// <summary>
@@ -55,10 +72,16 @@ namespace TetrisGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
-            //x += 1;
+            try
+            {
+
+            }
+            catch (System.Exception e)
+            {
+                ShowExceptionMessage(e);
+            }
 
             base.Update(gameTime);
         }
@@ -69,8 +92,31 @@ namespace TetrisGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            drawManager.Draw();
+            spriteBatch.Begin();
+
+            try
+            {
+                drawManager.DrawBackGround();
+                drawManager.DrawText(_gameLevel, _linesCount);
+                _field.Draw();
+                drawManager.DrawFigure();
+            }
+            catch (System.Exception e)
+            {
+                ShowExceptionMessage(e);
+            }
+
+            spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        private void ShowExceptionMessage(System.Exception e)
+        {
+            System.Windows.Forms.MessageBox.Show(
+                    e.GetType().Name + "\n\n" +
+                    e.Message + "\n\n" +
+                    e.StackTrace
+                , "Error");
         }
     }
 }

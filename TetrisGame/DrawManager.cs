@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using C3.MonoGame;
 
 namespace TetrisGame
 {
@@ -13,10 +14,9 @@ namespace TetrisGame
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-
         private GameWindow Window;
 
-        private Texture2D _wallTexture;
+        private Texture2D _backgroundTexture;
         private Texture2D _squareRed;
         private Texture2D _squareBlue;
         private Texture2D _squareGreen;
@@ -29,8 +29,7 @@ namespace TetrisGame
         private Rectangle _gameArea;
         private Rectangle _gameAreaForDraw;
         private Point _squareSize;
-
-        private int _thickness = 10;
+        private int _frameThickness = 10;
 
         public DrawManager(GraphicsDeviceManager graphics, GameWindow Window)
         {
@@ -45,7 +44,7 @@ namespace TetrisGame
             graphics.ApplyChanges();
 
             _gameArea = new Rectangle(50, 50, 300, 600);
-            _gameAreaForDraw = new Rectangle(50 - 1, 50 - _thickness, 300 + _thickness, 600 + _thickness);
+            _gameAreaForDraw = new Rectangle(50 - 1, 50 - _frameThickness, 300 + _frameThickness, 600 + _frameThickness);
             _squareSize = new Point(30, 30);
         }
 
@@ -54,7 +53,7 @@ namespace TetrisGame
             // Create a new SpriteBatch, which can be used to draw textures.
             this.spriteBatch = spriteBatch;
             
-            _wallTexture = Content.Load<Texture2D>("wall_1");
+            _backgroundTexture = Content.Load<Texture2D>("strips");
             _squareRed = Content.Load<Texture2D>("square_red");
             _squareBlue = Content.Load<Texture2D>("square_blue");
             _squareGreen = Content.Load<Texture2D>("square_green");
@@ -66,18 +65,46 @@ namespace TetrisGame
             _defaultFont = Content.Load<SpriteFont>("default");
         }
 
-        public void Draw()
+        public void DrawBackGround()
         {
-            //GraphicsDevice.Clear(Color.CornflowerBlue);
-            
-            spriteBatch.Begin();
-            spriteBatch.Draw(_wallTexture, new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.White);
-            C3.MonoGame.Primitives2D.FillRectangle(spriteBatch, _gameArea, Color.Black);
-            C3.MonoGame.Primitives2D.DrawRectangle(spriteBatch, _gameAreaForDraw, Color.Blue, _thickness);
-            spriteBatch.DrawString(_defaultFont, "test_text", new Vector2(200, 200), Color.White);
-            spriteBatch.Draw(_squareRed, new Rectangle(new Point(50, 50), _squareSize), Color.White);
-            spriteBatch.Draw(_squareRed, new Rectangle(new Point(320, 620), _squareSize), Color.White);
-            spriteBatch.End();
+            spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.White);
+            Primitives2D.FillRectangle(spriteBatch, _gameArea, Color.Black);
+            Primitives2D.DrawRectangle(spriteBatch, _gameAreaForDraw, Color.Blue, _frameThickness);
+        }
+
+        public void DrawFigure()
+        {
+            spriteBatch.Draw(_squareBlue, new Rectangle(new Point(150, 100), _squareSize), Color.White);
+            spriteBatch.Draw(_squareOrange, new Rectangle(new Point(220, 520), _squareSize), Color.White);
+        }
+
+        public void DrawText(int gameLevel, int linesCount)
+        {
+            spriteBatch.DrawString(_defaultFont, "level", new Vector2(400, 200), Color.Black);
+            spriteBatch.DrawString(_defaultFont, gameLevel.ToString(), new Vector2(440, 260), Color.Black);
+
+            spriteBatch.DrawString(_defaultFont, "lines", new Vector2(400, 400), Color.Black);
+            spriteBatch.DrawString(_defaultFont, linesCount.ToString(), new Vector2(440, 460), Color.Black);
+        }
+
+        public void DrawSquare(int x, int y, SquareColor color)    // координаты в матрице
+        {
+            Texture2D squareTexture = _squareRed;
+            switch(color)
+            {
+                case SquareColor.Empty: return; 
+                case SquareColor.Red: squareTexture = _squareRed; break;
+                case SquareColor.Blue: squareTexture = _squareBlue; break;
+                case SquareColor.Green: squareTexture = _squareGreen; break;
+                case SquareColor.Yellow: squareTexture = _squareYellow; break;
+                case SquareColor.Orange: squareTexture = _squareOrange; break;
+                case SquareColor.Violet: squareTexture = _squareViolet; break;
+                case SquareColor.LightBlue: squareTexture = _squareLightBlue; break;
+                default: throw new Exception("Unknown SquareColor");
+            }
+
+            var location = new Point(_gameArea.X + x * _squareSize.X, _gameArea.Y + y * _squareSize.Y);
+            spriteBatch.Draw(squareTexture, new Rectangle(location, _squareSize), Color.White);
         }
 
     }
