@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/wall_1.jpg</File>
+    <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/default.spritefont</File>
+    <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_green.png</File>
+    <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_light_blue.png</File>
+    <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_red.png</File>
+    <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_violet.png</File>
+    <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_yellow.png</File>
+    <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_blue.png</File>
+    <File>D:/C#/Projs/TetrisGame/TetrisGame/Content/square_orange.png</File>
+  </SourceFiles>
+</SourceFileCollection>

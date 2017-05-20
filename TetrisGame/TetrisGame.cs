@@ -9,13 +9,12 @@ namespace TetrisGame
     /// </summary>
     public class TetrisGame : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private DrawManager drawManager;
 
         public TetrisGame()
         {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            drawManager = new DrawManager(new GraphicsDeviceManager(this), Window);
+            Content.RootDirectory = "Content";           
         }
 
         /// <summary>
@@ -26,8 +25,7 @@ namespace TetrisGame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            drawManager.Initialize();
             base.Initialize();
         }
 
@@ -38,9 +36,7 @@ namespace TetrisGame
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            drawManager.LoadContent(new SpriteBatch(GraphicsDevice), Content);
         }
 
         /// <summary>
@@ -62,7 +58,7 @@ namespace TetrisGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            //x += 1;
 
             base.Update(gameTime);
         }
@@ -73,10 +69,7 @@ namespace TetrisGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-
+            drawManager.Draw();
             base.Draw(gameTime);
         }
     }
