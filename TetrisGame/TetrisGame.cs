@@ -14,14 +14,19 @@ namespace TetrisGame
         private bool _isSpeedUp = false;
         private int _linesCount = 0;
 
+        private int _figureCounter = 0;
+        private int _nextLevelFigureCount = 10;
+
         private bool _isRun = true;
 
         private Field _field;
         private FigureTypes _figureTypes;
         private Figure _currentFigure;
 
-        private int _currentTime = 0;
-        private int UpdatePeriodTime { get { return 1000 / _gameSpeed; } }
+        private int _currentTime1 = 0;
+        private int UpdatePeriodTime1 { get { return 1000 / _gameSpeed; } }
+        private int _currentTime2 = 0;
+        private int UpdatePeriodTime2 { get; } = 50;
 
         public TetrisGame()
         {
@@ -79,21 +84,13 @@ namespace TetrisGame
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
             if (!_isRun) return;
-            if (Keyboard.GetState().IsKeyDown(Keys.Down)) SpeedUp(true);
-            if (Keyboard.GetState().IsKeyUp(Keys.Down)) SpeedUp(false);
-
-            _currentTime += gameTime.ElapsedGameTime.Milliseconds;
-            if (_currentTime < UpdatePeriodTime) return;
-            else _currentTime = 0;
+            if (Keyboard.GetState().IsKeyDown(Keys.Space)) SpeedUp(true);
+            if (Keyboard.GetState().IsKeyUp(Keys.Space)) SpeedUp(false);
 
             try
             {
-                if (_field.CheckFigureDescent(_currentFigure)) _currentFigure.Y += 1;
-                else
-                {
-                    if (_field.AddFigure(_currentFigure)) CreateNewFigure();
-                    else GameOver();
-                }
+                PeriodicUpdate2(gameTime);
+                PeriodicUpdate1(gameTime);
             }
             catch (System.Exception e)
             {
@@ -138,6 +135,13 @@ namespace TetrisGame
         private void CreateNewFigure()
         {
             _currentFigure = new Figure(_figureTypes.GetRandomMatrix());
+            _figureCounter++;
+            if(_figureCounter >= _nextLevelFigureCount)
+            {
+                _figureCounter = 0;
+                _gameLevel += 1;
+                if (!_isSpeedUp) _gameSpeed += 1;
+            }
         }
 
         private void GameOver()
@@ -148,8 +152,42 @@ namespace TetrisGame
         private void SpeedUp(bool isEnabled)
         {
             _isSpeedUp = isEnabled;
-            if (isEnabled) _gameSpeed = 30;
+            if (isEnabled) _gameSpeed = _gameLevel + 30;
             else _gameSpeed = _gameLevel;
+        }
+
+        private void PeriodicUpdate1(GameTime gameTime)
+        {
+            _currentTime1 += gameTime.ElapsedGameTime.Milliseconds;
+            if (_currentTime1 < UpdatePeriodTime1) return;
+            else _currentTime1 = 0;
+
+            _currentFigure.Y += 1;
+            if (!_field.CheckFigureIntersection(_currentFigure))
+            {
+                _currentFigure.Y -= 1;
+                if (_field.AddFigure(_currentFigure)) CreateNewFigure();
+                else GameOver();
+            }
+        }
+
+        private void PeriodicUpdate2(GameTime gameTime)
+        {
+            _currentTime2 += gameTime.ElapsedGameTime.Milliseconds;
+            if (_currentTime2 < UpdatePeriodTime2) return;
+            else _currentTime2 = 0;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            {
+                _currentFigure.X -= 1;
+                if (!_field.CheckFigureIntersection(_currentFigure)) _currentFigure.X += 1;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+                _currentFigure.X += 1;
+                if (!_field.CheckFigureIntersection(_currentFigure)) _currentFigure.X -= 1;
+            }
         }
     }
 }

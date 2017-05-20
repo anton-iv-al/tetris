@@ -39,25 +39,26 @@ namespace TetrisGame
             return true;
         }
 
-        public bool CheckFigureDescent(Figure figure)
+        public bool CheckFigureIntersection(Figure figure)
         {
-            figure.Y += 1;
             for(int i = 0; i < 4; ++i)
             {
                 for (int j = 0; j < 4; ++j)
                 {
                     if (figure.Matrix[i, j] <= 0) continue;
                     bool isLowerThanField = figure.Y + j >= _matrixSizeY;
+                    bool isLefterThanField = figure.X + i < 0;
+                    bool isRighterThanField = figure.X + i >= _matrixSizeX;
+                    bool isHigherThanField = figure.Y + j < 0;
+                    bool isInField = !isLowerThanField && !isHigherThanField && !isLefterThanField && !isRighterThanField;
                     bool isSquareIntersects = false;
-                    if (!isLowerThanField && figure.Y + j >= 0) isSquareIntersects = _matrix[figure.X + i, figure.Y + j] > 0;
-                    if (isLowerThanField || isSquareIntersects) 
+                    if (isInField) isSquareIntersects = _matrix[figure.X + i, figure.Y + j] > 0;
+                    if (isLowerThanField || isLefterThanField || isRighterThanField || isSquareIntersects) 
                     {
-                        figure.Y -= 1;
                         return false;
                     }
                 }
             }
-            figure.Y -= 1;
             return true;
         }
 

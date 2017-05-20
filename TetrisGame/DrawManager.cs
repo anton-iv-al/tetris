@@ -72,7 +72,7 @@ namespace TetrisGame
         {
             spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.White);
             Primitives2D.FillRectangle(spriteBatch, _gameArea, Color.Black);
-            Primitives2D.DrawRectangle(spriteBatch, _gameAreaForDraw, Color.Blue, _frameThickness);
+            Primitives2D.DrawRectangle(spriteBatch, _gameAreaForDraw, Color.Gray, _frameThickness);
         }
 
         public void DrawText(int gameLevel, int linesCount)
