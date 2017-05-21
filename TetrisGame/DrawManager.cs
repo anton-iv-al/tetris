@@ -28,6 +28,7 @@ namespace TetrisGame
 
         private Rectangle _gameArea;
         private Rectangle _gameAreaForDraw;
+        private Rectangle _previewArea;
         private Point _squareSize;
         private int _frameThickness = 10;
 
@@ -49,6 +50,8 @@ namespace TetrisGame
             _gameArea = new Rectangle(50, 50, 300, 600);
             _gameAreaForDraw = new Rectangle(50 - 1, 50 - _frameThickness, 300 + _frameThickness, 600 + _frameThickness);
             _squareSize = new Point(30, 30);
+
+            _previewArea = new Rectangle(400, 50, 150, 150);
         }
 
         public void LoadContent(SpriteBatch spriteBatch, Microsoft.Xna.Framework.Content.ContentManager Content)
@@ -73,15 +76,18 @@ namespace TetrisGame
             spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.White);
             Primitives2D.FillRectangle(spriteBatch, _gameArea, Color.Black);
             Primitives2D.DrawRectangle(spriteBatch, _gameAreaForDraw, Color.Gray, _frameThickness);
+
+            Primitives2D.FillRectangle(spriteBatch, _previewArea, Color.Black);
+            Primitives2D.DrawRectangle(spriteBatch, _previewArea, Color.Gray, _frameThickness);
         }
 
         public void DrawText(int gameLevel, int linesCount)
         {
-            spriteBatch.DrawString(_defaultFont, "level", new Vector2(400, 200), Color.Black);
-            spriteBatch.DrawString(_defaultFont, gameLevel.ToString(), new Vector2(440, 260), Color.Black);
+            spriteBatch.DrawString(_defaultFont, "level", new Vector2(400, 300), Color.Black);
+            spriteBatch.DrawString(_defaultFont, gameLevel.ToString(), new Vector2(440, 360), Color.Black);
 
-            spriteBatch.DrawString(_defaultFont, "lines", new Vector2(400, 400), Color.Black);
-            spriteBatch.DrawString(_defaultFont, linesCount.ToString(), new Vector2(440, 460), Color.Black);
+            spriteBatch.DrawString(_defaultFont, "lines", new Vector2(400, 500), Color.Black);
+            spriteBatch.DrawString(_defaultFont, linesCount.ToString(), new Vector2(440, 560), Color.Black);
         }
 
         public void DrawGameOver()
@@ -92,15 +98,12 @@ namespace TetrisGame
             spriteBatch.DrawString(_defaultFont, "GameOver", new Vector2(50, 300), Color.Orange);           
         }
 
-        public void DrawSquare(int x, int y, SquareColor color)    // координаты в матрице
+        private Texture2D GetSquareTexture(SquareColor color)
         {
-            y -= 4;
-            if (x < 0 || x >= MatrixSizeX || y < 0 || y >= MatrixSizeY) return;
-
-            Texture2D squareTexture = _squareRed;
-            switch(color)
+            Texture2D squareTexture;
+            switch (color)
             {
-                case SquareColor.Empty: return; 
+                case SquareColor.Empty: return null;
                 case SquareColor.Red: squareTexture = _squareRed; break;
                 case SquareColor.Blue: squareTexture = _squareBlue; break;
                 case SquareColor.Green: squareTexture = _squareGreen; break;
@@ -110,8 +113,29 @@ namespace TetrisGame
                 case SquareColor.LightBlue: squareTexture = _squareLightBlue; break;
                 default: throw new Exception("Unknown SquareColor");
             }
+            return squareTexture;
+        }
 
-            var location = new Point(_gameArea.X + x * _squareSize.X, _gameArea.Y + y * _squareSize.Y);
+        public void DrawSquare(int x, int y, SquareColor color)    // координаты в матрице
+        {
+            y -= 4;
+            if (x < 0 || x >= MatrixSizeX || y < 0 || y >= MatrixSizeY) return;
+
+            Texture2D squareTexture = GetSquareTexture(color);
+            if (squareTexture == null) return;
+
+            var location = new Point(_gameArea.X + x * _squareSize.X, 
+                                     _gameArea.Y + y * _squareSize.Y);
+            spriteBatch.Draw(squareTexture, new Rectangle(location, _squareSize), Color.White);
+        }
+
+        public void DrawSquareInPreview(int x, int y, SquareColor color)    // координаты в матрице
+        {
+            Texture2D squareTexture = GetSquareTexture(color);
+            if (squareTexture == null) return;
+
+            var location = new Point(_previewArea.X + _frameThickness + x * _squareSize.X,
+                                     _previewArea.Y + _frameThickness + y * _squareSize.Y);
             spriteBatch.Draw(squareTexture, new Rectangle(location, _squareSize), Color.White);
         }
 

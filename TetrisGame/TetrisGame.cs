@@ -18,13 +18,19 @@ namespace TetrisGame
         private int _nextLevelFigureCount = 10;
 
         private bool _isRun = true;
+        private bool _isGameOver = false;
 
         private Field _field;
         private FigureTypes _figureTypes;
         private Figure _currentFigure;
+        private Figure _nextFigure;
+
+        private int _maxGameLevel = 10;
+        private int _firstLevelTimeDelay = 1000;
+        private int _lastLevelTimeDelay = 20;
 
         private int _currentTime1 = 0;
-        private int UpdatePeriodTime1 { get { return 1000 / _gameSpeed; } }
+        private int UpdatePeriodTime1 { get{ return _firstLevelTimeDelay + (_lastLevelTimeDelay - _firstLevelTimeDelay) / (_maxGameLevel - 1) * (_gameSpeed - 1); } }
         private int _currentTime2 = 0;
         private int UpdatePeriodTime2 { get; } = 50;
         private int _currentTime3 = 0;
@@ -38,6 +44,8 @@ namespace TetrisGame
                 _field = new Field(drawManager);
                 Figure.DrawManager = drawManager;
                 _figureTypes = new FigureTypes();
+
+                _nextFigure = new Figure(_figureTypes.GetRandomMatrix());
                 CreateNewFigure();
 
                 Content.RootDirectory = "Content";
@@ -85,11 +93,8 @@ namespace TetrisGame
         protected override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
-            if (!_isRun)
-            {
-                if (Keyboard.GetState().IsKeyDown(Keys.Enter)) Restart();
-                return;
-            }
+            if (_isGameOver && Keyboard.GetState().IsKeyDown(Keys.Enter)) Restart();
+            if (!_isRun) return;
             if (Keyboard.GetState().IsKeyDown(Keys.Space)) SpeedUp(true);
             if (Keyboard.GetState().IsKeyUp(Keys.Space)) SpeedUp(false);
 
@@ -114,15 +119,13 @@ namespace TetrisGame
 
             try
             {
-                if (!_isRun)
-                {
-                    drawManager.DrawGameOver();
-                    return;
-                }
+                if (_isGameOver) drawManager.DrawGameOver();
+                if (!_isRun) return;
                 drawManager.DrawBackGround();
                 drawManager.DrawText(_gameLevel, _linesCount);
                 _field.Draw();
                 _currentFigure.Draw();
+                _nextFigure.DrawInPrevievw();
             }
             catch (System.Exception e)
             {
@@ -147,7 +150,8 @@ namespace TetrisGame
 
         private void CreateNewFigure()
         {
-            _currentFigure = new Figure(_figureTypes.GetRandomMatrix());
+            _currentFigure = _nextFigure;
+            _nextFigure = new Figure(_figureTypes.GetRandomMatrix());
             _figureCounter++;
             if(_figureCounter >= _nextLevelFigureCount)
             {
@@ -160,12 +164,13 @@ namespace TetrisGame
         private void GameOver()
         {
             _isRun = false;
+            _isGameOver = true;
         }
 
         private void SpeedUp(bool isEnabled)
         {
             _isSpeedUp = isEnabled;
-            if (isEnabled) _gameSpeed = _gameLevel + 30;
+            if (isEnabled) _gameSpeed = _maxGameLevel;
             else _gameSpeed = _gameLevel;
         }
 
@@ -229,6 +234,7 @@ namespace TetrisGame
         private void Restart()
         {
             _isRun = true;
+            _isGameOver = false;
             _field.Clear();
             CreateNewFigure();
             _gameLevel = 1;

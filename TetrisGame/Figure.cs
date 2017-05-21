@@ -31,6 +31,17 @@ namespace TetrisGame
             }
         }
 
+        public void DrawInPrevievw()
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                for (int j = 0; j < 4; ++j)
+                {
+                    DrawManager.DrawSquareInPreview(i, j, Matrix[i, j]);
+                }
+            }
+        }
+
         public void RotateRight()
         {
             var newMatrix = new SquareColor[4, 4];
