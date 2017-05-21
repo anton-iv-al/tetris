@@ -30,5 +30,31 @@ namespace TetrisGame
                 }
             }
         }
+
+        public void RotateRight()
+        {
+            var newMatrix = new SquareColor[4, 4];
+            for(int i=0; i<4; ++i)
+            {
+                for (int j = 0; j < 4; ++j)
+                {
+                    newMatrix[i, j] = Matrix[3 - j, i];
+                }
+            }
+            Matrix = newMatrix;
+        }
+
+        public void RotateLeft()
+        {
+            var newMatrix = new SquareColor[4, 4];
+            for (int i = 0; i < 4; ++i)
+            {
+                for (int j = 0; j < 4; ++j)
+                {
+                    newMatrix[i, j] = Matrix[j, 3 - i];
+                }
+            }
+            Matrix = newMatrix;
+        }
     }
 }

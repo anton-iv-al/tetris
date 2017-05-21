@@ -32,13 +32,6 @@ namespace TetrisGame
             }
         }
 
-        public bool CheckFigureRotation(Figure figure, out int shiftX)
-        {
-            throw new NotImplementedException();
-            shiftX = 0;
-            return true;
-        }
-
         public bool CheckFigureIntersection(Figure figure)
         {
             for(int i = 0; i < 4; ++i)

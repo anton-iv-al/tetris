@@ -27,6 +27,8 @@ namespace TetrisGame
         private int UpdatePeriodTime1 { get { return 1000 / _gameSpeed; } }
         private int _currentTime2 = 0;
         private int UpdatePeriodTime2 { get; } = 50;
+        private int _currentTime3 = 0;
+        private int UpdatePeriodTime3 { get; } = 100;
 
         public TetrisGame()
         {
@@ -89,6 +91,7 @@ namespace TetrisGame
 
             try
             {
+                PeriodicUpdate3(gameTime);
                 PeriodicUpdate2(gameTime);
                 PeriodicUpdate1(gameTime);
             }
@@ -175,18 +178,39 @@ namespace TetrisGame
         {
             _currentTime2 += gameTime.ElapsedGameTime.Milliseconds;
             if (_currentTime2 < UpdatePeriodTime2) return;
-            else _currentTime2 = 0;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
                 _currentFigure.X -= 1;
                 if (!_field.CheckFigureIntersection(_currentFigure)) _currentFigure.X += 1;
+                _currentTime2 = 0;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
                 _currentFigure.X += 1;
                 if (!_field.CheckFigureIntersection(_currentFigure)) _currentFigure.X -= 1;
+                _currentTime2 = 0;
+            }
+        }
+
+        private void PeriodicUpdate3(GameTime gameTime)
+        {
+            _currentTime3 += gameTime.ElapsedGameTime.Milliseconds;
+            if (_currentTime3 < UpdatePeriodTime3) return;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
+                _currentFigure.RotateRight();
+                if (!_field.CheckFigureIntersection(_currentFigure)) _currentFigure.RotateLeft();
+                _currentTime3 = 0;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                _currentFigure.RotateLeft();
+                if (!_field.CheckFigureIntersection(_currentFigure)) _currentFigure.RotateRight();
+                _currentTime3 = 0;
             }
         }
     }
