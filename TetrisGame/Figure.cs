@@ -10,14 +10,15 @@ namespace TetrisGame
     {
         public static DrawManager DrawManager { get; set; }
 
-        public SquareColor[,] Matrix { get; private set; }
+        private SquareColor[,] _matrix;
+        public SquareColor this[int x, int y] { get { return _matrix[x, y]; } }
 
         public int X { get; set; } = 3;
         public int Y { get; set; } = 0;
 
         public Figure(SquareColor[,] matrix)
         {
-            Matrix = matrix;
+            _matrix = matrix;
         }
 
         public void Draw()
@@ -26,7 +27,7 @@ namespace TetrisGame
             {
                 for (int j = 0; j < 4; ++j)
                 {
-                    DrawManager.DrawSquare(X+i, Y+j, Matrix[i, j]);
+                    DrawManager.DrawSquare(X+i, Y+j, _matrix[i, j]);
                 }
             }
         }
@@ -37,7 +38,7 @@ namespace TetrisGame
             {
                 for (int j = 0; j < 4; ++j)
                 {
-                    DrawManager.DrawSquareInPreview(i, j, Matrix[i, j]);
+                    DrawManager.DrawSquareInPreview(i, j, _matrix[i, j]);
                 }
             }
         }
@@ -49,10 +50,10 @@ namespace TetrisGame
             {
                 for (int j = 0; j < 4; ++j)
                 {
-                    newMatrix[i, j] = Matrix[3 - j, i];
+                    newMatrix[i, j] = _matrix[3 - j, i];
                 }
             }
-            Matrix = newMatrix;
+            _matrix = newMatrix;
         }
 
         public void RotateLeft()
@@ -62,10 +63,10 @@ namespace TetrisGame
             {
                 for (int j = 0; j < 4; ++j)
                 {
-                    newMatrix[i, j] = Matrix[j, 3 - i];
+                    newMatrix[i, j] = _matrix[j, 3 - i];
                 }
             }
-            Matrix = newMatrix;
+            _matrix = newMatrix;
         }
     }
 }

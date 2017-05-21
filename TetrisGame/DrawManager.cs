@@ -135,7 +135,7 @@ namespace TetrisGame
             if (squareTexture == null) return;
 
             var location = new Point(_previewArea.X + _frameThickness + x * _squareSize.X,
-                                     _previewArea.Y + _frameThickness + y * _squareSize.Y);
+                                     _previewArea.Y + _frameThickness*2 + y * _squareSize.Y);
             spriteBatch.Draw(squareTexture, new Rectangle(location, _squareSize), Color.White);
         }
 

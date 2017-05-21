@@ -38,7 +38,7 @@ namespace TetrisGame
             {
                 for (int j = 0; j < 4; ++j)
                 {
-                    if (figure.Matrix[i, j] <= 0) continue;
+                    if (figure[i, j] <= 0) continue;
                     bool isLowerThanField = figure.Y + j >= _matrixSizeY;
                     bool isLefterThanField = figure.X + i < 0;
                     bool isRighterThanField = figure.X + i >= _matrixSizeX;
@@ -61,8 +61,8 @@ namespace TetrisGame
             {
                 for (int j = 0; j < 4; ++j)
                 {
-                    if (figure.Matrix[i, j] <= 0) continue;
-                    _matrix[figure.X + i, figure.Y + j] = figure.Matrix[i, j];
+                    if (figure[i, j] <= 0) continue;
+                    _matrix[figure.X + i, figure.Y + j] = figure[i, j];
                 }
             }
         }

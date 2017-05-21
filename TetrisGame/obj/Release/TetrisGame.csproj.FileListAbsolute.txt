@@ -31,3 +31,4 @@ D:\C#\Projs\TetrisGame\TetrisGame\bin\Release\SharpDX.XInput.xml
 D:\C#\Projs\TetrisGame\TetrisGame\bin\Release\SharpDX.Direct3D9.xml
 D:\C#\Projs\TetrisGame\TetrisGame\obj\Release\TetrisGame.exe
 D:\C#\Projs\TetrisGame\TetrisGame\obj\Release\TetrisGame.pdb
+D:\C#\Projs\TetrisGame\TetrisGame\obj\Release\TetrisGame.csprojResolveAssemblyReference.cache
