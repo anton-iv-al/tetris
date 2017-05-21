@@ -85,7 +85,11 @@ namespace TetrisGame
         protected override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
-            if (!_isRun) return;
+            if (!_isRun)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter)) Restart();
+                return;
+            }
             if (Keyboard.GetState().IsKeyDown(Keys.Space)) SpeedUp(true);
             if (Keyboard.GetState().IsKeyUp(Keys.Space)) SpeedUp(false);
 
@@ -106,11 +110,15 @@ namespace TetrisGame
 
         protected override void Draw(GameTime gameTime)
         {
-            if (!_isRun) return;
             spriteBatch.Begin();
 
             try
             {
+                if (!_isRun)
+                {
+                    drawManager.DrawGameOver();
+                    return;
+                }
                 drawManager.DrawBackGround();
                 drawManager.DrawText(_gameLevel, _linesCount);
                 _field.Draw();
@@ -121,8 +129,10 @@ namespace TetrisGame
                 _isRun = false;
                 ShowExceptionMessage(e);
             }
-
-            spriteBatch.End();
+            finally
+            {
+                spriteBatch.End();
+            }
             base.Draw(gameTime);
         }
 
@@ -169,8 +179,10 @@ namespace TetrisGame
             if (!_field.CheckFigureIntersection(_currentFigure))
             {
                 _currentFigure.Y -= 1;
-                if (_field.AddFigure(_currentFigure)) CreateNewFigure();
-                else GameOver();
+                _field.AddFigure(_currentFigure);
+                _linesCount += _field.RemoveLines();
+                if (_field.CheckGamoOver()) GameOver();
+                else CreateNewFigure();
             }
         }
 
@@ -213,5 +225,15 @@ namespace TetrisGame
                 _currentTime3 = 0;
             }
         }
+
+        private void Restart()
+        {
+            _isRun = true;
+            _field.Clear();
+            CreateNewFigure();
+            _gameLevel = 1;
+            _gameSpeed = 1;
+            _linesCount = 0;
+    }
     }
 }

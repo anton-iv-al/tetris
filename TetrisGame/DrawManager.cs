@@ -84,8 +84,17 @@ namespace TetrisGame
             spriteBatch.DrawString(_defaultFont, linesCount.ToString(), new Vector2(440, 460), Color.Black);
         }
 
+        public void DrawGameOver()
+        {
+            var textArea = new Rectangle(40, 290, 325, 90);
+            Primitives2D.FillRectangle(spriteBatch, textArea, Color.Black);
+            Primitives2D.DrawRectangle(spriteBatch, textArea, Color.White, _frameThickness);
+            spriteBatch.DrawString(_defaultFont, "GameOver", new Vector2(50, 300), Color.Orange);           
+        }
+
         public void DrawSquare(int x, int y, SquareColor color)    // координаты в матрице
         {
+            y -= 4;
             if (x < 0 || x >= MatrixSizeX || y < 0 || y >= MatrixSizeY) return;
 
             Texture2D squareTexture = _squareRed;

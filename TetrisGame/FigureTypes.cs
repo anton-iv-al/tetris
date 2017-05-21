@@ -9,7 +9,7 @@ namespace TetrisGame
 {
     public class FigureTypes
     {
-        private List<Figure> _types = new List<Figure>();
+        private List<SquareColor[,]> _types = new List<SquareColor[,]>();
 
         Random _random = new Random();
 
@@ -36,7 +36,7 @@ namespace TetrisGame
                 j++;
                 if (j > 3)
                 {
-                    _types.Add(new Figure(matrix));
+                    _types.Add(matrix);
                     j = 0;
                     matrix = new SquareColor[4, 4];
                 }
@@ -54,7 +54,7 @@ namespace TetrisGame
         public SquareColor[,] GetRandomMatrix()
         {
             int number = _random.Next(0, _types.Count);
-            return _types[number].Matrix;
+            return _types[number].Clone() as SquareColor[,];
         }
     }
 }

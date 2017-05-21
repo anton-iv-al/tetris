@@ -13,11 +13,11 @@ namespace TetrisGame
         public SquareColor[,] Matrix { get; private set; }
 
         public int X { get; set; } = 3;
-        public int Y { get; set; } = -4;
+        public int Y { get; set; } = 0;
 
         public Figure(SquareColor[,] matrix)
         {
-            Matrix = matrix.Clone() as SquareColor[,];
+            Matrix = matrix;
         }
 
         public void Draw()

@@ -11,7 +11,7 @@ namespace TetrisGame
         private static DrawManager DrawManager { get; set; }
 
         private const int _matrixSizeX = 10;
-        private const int _matrixSizeY = 20;
+        private const int _matrixSizeY = 24;    // первые 4 выше границы
         private SquareColor[,] _matrix = new SquareColor[_matrixSizeX, _matrixSizeY];
 
         public Field(DrawManager drawManager)
@@ -23,7 +23,7 @@ namespace TetrisGame
 
         public void Draw()
         {
-            for(int i=0; i < _matrixSizeX; ++i)
+            for(int i = 0; i < _matrixSizeX; ++i)
             {
                 for (int j = 0; j < _matrixSizeY; ++j)
                 {
@@ -55,18 +55,68 @@ namespace TetrisGame
             return true;
         }
 
-        public bool AddFigure(Figure figure)
+        public void AddFigure(Figure figure)
         {
             for (int i = 0; i < 4; ++i)
             {
                 for (int j = 0; j < 4; ++j)
                 {
                     if (figure.Matrix[i, j] <= 0) continue;
-                    if (figure.Y + j < 0) return false;
                     _matrix[figure.X + i, figure.Y + j] = figure.Matrix[i, j];
                 }
             }
-            return true;
+        }
+
+        public int RemoveLines()
+        {
+            int linesCount = 0;
+            for (int j = 0; j < _matrixSizeY; ++j)
+            {
+                bool isFullLine = true;
+                for (int i = 0; i < _matrixSizeX; ++i)
+                {
+                    if (_matrix[i,j] <= 0)
+                    {
+                        isFullLine = false;
+                        break;
+                    }
+                }
+                if(isFullLine)
+                {
+                    RemoveLine(j);
+                    linesCount++;
+                }
+            }
+            return linesCount;
+        }
+
+        private void RemoveLine(int y)
+        {
+            for (int j = y - 1; j >= 0; --j)
+            {
+                for (int i = 0; i < _matrixSizeX; ++i)
+                {
+                    _matrix[i, j + 1] = _matrix[i, j];
+                }
+            }
+        }
+
+        public bool CheckGamoOver()
+        {
+            for (int i = 0; i < _matrixSizeX; ++i)
+            {
+                for (int j = 0; j < 4; ++j)
+                {
+                    if (_matrix[i,j] > 0)
+                          return true;
+                }
+            }
+            return false;
+        }
+
+        public void Clear()
+        {
+            _matrix = new SquareColor[_matrixSizeX, _matrixSizeY];
         }
     }
 }
