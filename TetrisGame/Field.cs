@@ -8,22 +8,21 @@ namespace TetrisGame
 {
     public class Field
     {
-        private static DrawManager DrawManager { get; set; }
+        private static IDrawAdapter DrawAdapter => DrawManager.Instance.Adapter;
 
         private const int _matrixSizeX = 10;
         private const int _matrixSizeY = 24;    // первые 4 выше границы
         private SquareColor[,] _matrix = new SquareColor[_matrixSizeX, _matrixSizeY];
 
-        public Field(DrawManager drawManager)
+        public Field()
         {
-            DrawManager = drawManager;
-            DrawManager.MatrixSizeX = _matrixSizeX;
-            DrawManager.MatrixSizeY = _matrixSizeY;
+            DrawAdapter.MatrixSizeX = _matrixSizeX;
+            DrawAdapter.MatrixSizeY = _matrixSizeY;
         }
 
         public void Draw()
         {
-            _matrix.ForEach((i,j,c) => DrawManager.DrawSquare(i, j, c));
+            _matrix.ForEach((i,j,c) => DrawAdapter.DrawSquare(i, j, c));
         }
 
         public bool CheckFigureIntersection(Figure figure)

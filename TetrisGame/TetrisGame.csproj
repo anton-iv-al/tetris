@@ -62,9 +62,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DrawManager.cs" />
+    <Compile Include="MonoGameDrawAdapter.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="Figure.cs" />
     <Compile Include="FigureTypes.cs" />
+    <Compile Include="IDrawAdapter.cs" />
     <Compile Include="SquareColor.cs" />
     <Compile Include="TetrisGame.cs" />
     <Compile Include="Program.cs" />

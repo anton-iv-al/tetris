@@ -10,7 +10,7 @@ namespace TetrisGame
 {
     public class Figure
     {
-        public static DrawManager DrawManager { get; set; }
+        private static IDrawAdapter DrawAdapter => DrawManager.Instance.Adapter;
 
         public SquareColor[,] Matrix;
 
@@ -24,12 +24,12 @@ namespace TetrisGame
 
         public void Draw()
         {
-            Matrix.ForEach((i, j, c) => DrawManager.DrawSquare(X + i, Y + j, c));
+            Matrix.ForEach((i, j, c) => DrawAdapter.DrawSquare(X + i, Y + j, c));
         }
 
         public void DrawInPrevievw()
         {
-            Matrix.ForEach((i, j, c) => DrawManager.DrawSquareInPreview(i, j, c));
+            Matrix.ForEach((i, j, c) => DrawAdapter.DrawSquareInPreview(i, j, c));
         }
 
         public void RotateRight()

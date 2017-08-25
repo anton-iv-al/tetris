@@ -6,8 +6,12 @@ namespace TetrisGame
 {
     public class TetrisGame : Game
     {
-        private SpriteBatch spriteBatch;
-        private DrawManager drawManager;
+        public static SpriteBatch SpriteBatch { get; private set; }
+        public static Microsoft.Xna.Framework.Content.ContentManager StaticContent;
+        public static GraphicsDeviceManager StaticGraphics;
+        public static GameWindow StaticWindow;
+
+        private IDrawAdapter DrawAdapter => DrawManager.Instance.Adapter;
 
         private int _gameLevel = 1;
         private int _gameSpeed = 1;
@@ -40,9 +44,9 @@ namespace TetrisGame
         {
             try
             {
-                drawManager = new DrawManager(new GraphicsDeviceManager(this), Window);
-                _field = new Field(drawManager);
-                Figure.DrawManager = drawManager;
+                StaticGraphics = new GraphicsDeviceManager(this);
+                StaticWindow = Window;
+                _field = new Field();
                 _figureTypes = new FigureTypes();
 
                 _nextFigure = new Figure(_figureTypes.GetRandomMatrix());
@@ -61,7 +65,7 @@ namespace TetrisGame
         {
             try
             {
-                drawManager.Initialize();
+                DrawAdapter.Initialize();
             }
             catch (System.Exception e)
             {
@@ -75,8 +79,9 @@ namespace TetrisGame
         {           
             try
             {
-                spriteBatch = new SpriteBatch(GraphicsDevice);
-                drawManager.LoadContent(spriteBatch, Content);
+                SpriteBatch = new SpriteBatch(GraphicsDevice);
+                StaticContent = Content;
+                DrawAdapter.LoadContent();
             }
             catch (System.Exception e)
             {
@@ -115,14 +120,14 @@ namespace TetrisGame
 
         protected override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin();
+            SpriteBatch.Begin();
 
             try
             {
-                if (_isGameOver) drawManager.DrawGameOver();
+                if (_isGameOver) DrawAdapter.DrawGameOver();
                 if (!_isRun) return;
-                drawManager.DrawBackGround();
-                drawManager.DrawText(_gameLevel, _linesCount);
+                DrawAdapter.DrawBackGround();
+                DrawAdapter.DrawText(_gameLevel, _linesCount);
                 _field.Draw();
                 _currentFigure.Draw();
                 _nextFigure.DrawInPrevievw();
@@ -134,7 +139,7 @@ namespace TetrisGame
             }
             finally
             {
-                spriteBatch.End();
+                SpriteBatch.End();
             }
             base.Draw(gameTime);
         }
