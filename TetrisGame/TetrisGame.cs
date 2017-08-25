@@ -30,7 +30,7 @@ namespace TetrisGame
         private int _lastLevelTimeDelay = 20;
 
         private int _currentTime1 = 0;
-        private int UpdatePeriodTime1 { get{ return _firstLevelTimeDelay + (_lastLevelTimeDelay - _firstLevelTimeDelay) / (_maxGameLevel - 1) * (_gameSpeed - 1); } }
+        private int UpdatePeriodTime1 => _firstLevelTimeDelay + (_lastLevelTimeDelay - _firstLevelTimeDelay) / (_maxGameLevel - 1) * (_gameSpeed - 1);
         private int _currentTime2 = 0;
         private int UpdatePeriodTime2 { get; } = 50;
         private int _currentTime3 = 0;
@@ -153,7 +153,12 @@ namespace TetrisGame
             _currentFigure = _nextFigure;
             _nextFigure = new Figure(_figureTypes.GetRandomMatrix());
             _figureCounter++;
-            if(_figureCounter >= _nextLevelFigureCount)
+            TryAddLevel();
+        }
+
+        private void TryAddLevel()
+        {
+            if (_figureCounter >= _nextLevelFigureCount && _gameLevel < _maxGameLevel)
             {
                 _figureCounter = 0;
                 _gameLevel += 1;

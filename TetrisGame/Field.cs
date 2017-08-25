@@ -23,22 +23,15 @@ namespace TetrisGame
 
         public void Draw()
         {
-            for(int i = 0; i < _matrixSizeX; ++i)
-            {
-                for (int j = 0; j < _matrixSizeY; ++j)
-                {
-                    DrawManager.DrawSquare(i, j, _matrix[i, j]);
-                }
-            }
+            _matrix.ForEach((i,j,c) => DrawManager.DrawSquare(i, j, c));
         }
 
         public bool CheckFigureIntersection(Figure figure)
         {
-            for(int i = 0; i < 4; ++i)
+            bool isIntersect = figure.Matrix.Any((i, j, c) =>
             {
-                for (int j = 0; j < 4; ++j)
+                if (c > 0)
                 {
-                    if (figure[i, j] <= 0) continue;
                     bool isLowerThanField = figure.Y + j >= _matrixSizeY;
                     bool isLefterThanField = figure.X + i < 0;
                     bool isRighterThanField = figure.X + i >= _matrixSizeX;
@@ -46,25 +39,22 @@ namespace TetrisGame
                     bool isInField = !isLowerThanField && !isHigherThanField && !isLefterThanField && !isRighterThanField;
                     bool isSquareIntersects = false;
                     if (isInField) isSquareIntersects = _matrix[figure.X + i, figure.Y + j] > 0;
-                    if (isLowerThanField || isLefterThanField || isRighterThanField || isSquareIntersects) 
+                    if (isLowerThanField || isLefterThanField || isRighterThanField || isSquareIntersects)
                     {
-                        return false;
+                        return true;
                     }
                 }
-            }
-            return true;
+                return false;
+            });
+            return !isIntersect;
         }
 
         public void AddFigure(Figure figure)
         {
-            for (int i = 0; i < 4; ++i)
+            figure.Matrix.ForEach((i, j, c) =>
             {
-                for (int j = 0; j < 4; ++j)
-                {
-                    if (figure[i, j] <= 0) continue;
-                    _matrix[figure.X + i, figure.Y + j] = figure[i, j];
-                }
-            }
+                if (c > 0) _matrix[figure.X + i, figure.Y + j] = c;
+            });
         }
 
         public int RemoveLines()
